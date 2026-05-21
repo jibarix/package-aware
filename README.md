@@ -93,14 +93,6 @@ username, home path, or `C:\Users\...`** — the public doc must stay sanitized.
 
 ---
 
-## What is deliberately NOT in here
-
-- Machine-specific rollback notes and backup locations (kept private).
-- Usernames, home directories, absolute paths, local CLI install paths.
-- Any secret. Nothing here is sensitive; it's all policy.
-
----
-
 ## The short version of the philosophy
 
 - Prefer exact version pins and committed lockfiles over `latest` and loose ranges.
