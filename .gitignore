@@ -1,0 +1,27 @@
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor noise
+.vscode/
+.idea/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Logs and temp files
+*.log
+*.tmp
+*.temp
+
+# Local backup and machine-only artifacts
+*.bak
+backups/
+private/
+local/
+
+# Keep the shareable repo assets
+!PACKAGE_AWARE_PLATFORM_SETTINGS.md
+!package-aware-hardening/
