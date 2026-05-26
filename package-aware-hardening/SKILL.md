@@ -70,7 +70,13 @@ It applies these defaults:
 - Add deny rules for risky package-manager and extension-install commands
 - Set VS Code updates and extension updates to manual
 - Insert or refresh a managed hardening block in `~/.claude/CLAUDE.md`
-- Create timestamped backups before writing changes
+- Create timestamped backups before writing changes (distinct filenames per
+  source file, so the Claude and VS Code backups never collide)
+
+The apply script uses a *surgical merge* and a verification gate: it only
+writes the specific keys listed above, and aborts before writing if the
+serialized output would change any key not in that allowed set. Pre-existing
+settings outside the hardening posture are preserved verbatim.
 
 ## Shareable document rules
 
@@ -112,10 +118,13 @@ anything."
 Actions:
 
 1. Run `apply_package_aware_hardening.ps1 -DryRun`.
-2. Report the returned object — especially `AddedDenyRules` and `ClaudeMdAction`.
+2. Report the printed change tables — in particular the per-key `Path / Action
+   / Previous / New` rows for `Claude settings` and `VS Code settings`, and the
+   `action:` line under `CLAUDE.md`.
 
-Result: The user sees the planned changes (and which `CLAUDE.md` branch will run)
-with no files written.
+Result: The user sees every planned change in a row-per-key table, with no
+files written. The structured summary is also emitted on the success pipeline
+for programmatic use.
 
 ### Example 2: Apply the posture on a fresh machine
 
@@ -124,11 +133,18 @@ User says: "Set up my package-aware defaults on this new laptop."
 Actions:
 
 1. Run `apply_package_aware_hardening.ps1` (no `-DryRun`).
-2. Confirm `ClaudeMdAction: inserted-managed-block` and note the backup directory.
+2. Confirm the `Claude settings`, `VS Code settings`, and `CLAUDE.md` sections
+   each report their actions, and note the printed `Backup directory:` path.
 
-Result: Claude Code and VS Code settings are hardened; the managed block is added
-to `CLAUDE.md`; originals are backed up under
-`~/.claude/backups/package-aware-hardening/<timestamp>/`.
+Result: Claude Code and VS Code settings are hardened; the managed block is
+added to `CLAUDE.md`; originals are backed up under
+`~/.claude/backups/package-aware-hardening/<timestamp>/` with distinct
+per-source-file names (`claude_settings.json.bak`, `claude_CLAUDE.md.bak`,
+`vscode_settings.json.bak`).
+
+If the script detects that the serialized output would change any key outside
+the documented hardening posture, it **aborts before writing** and reports the
+unexpected diff, so a future bug cannot silently corrupt unrelated settings.
 
 ### Example 3: Refresh only the public document
 
