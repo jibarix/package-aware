@@ -92,6 +92,27 @@ function Ensure-ParentDirectory {
     }
 }
 
+function Confirm-BackupIntegrity {
+    # Asserts the backup was actually written and is byte-identical to the
+    # source. Throws (writing nothing else) if either check fails -- callers
+    # rely on this so the subsequent write of new content cannot proceed with a
+    # missing or corrupted recovery copy.
+    param(
+        [string]$SourcePath,
+        [string]$BackupPath
+    )
+    if (-not (Test-Path -LiteralPath $BackupPath)) {
+        throw "ABORT: backup was not created at '$BackupPath'. Original file '$SourcePath' has not been modified."
+    }
+    $sourceHash = (Get-FileHash -LiteralPath $SourcePath -Algorithm SHA256).Hash
+    $backupHash = (Get-FileHash -LiteralPath $BackupPath -Algorithm SHA256).Hash
+    if ($sourceHash -ne $backupHash) {
+        throw ("ABORT: backup at '$BackupPath' does not match source '$SourcePath' " +
+               "(source SHA256=$sourceHash, backup SHA256=$backupHash). " +
+               "Original file has not been modified.")
+    }
+}
+
 function Read-JsonOrEmptyObject {
     # Returns a PSCustomObject. Never mangles strings; if the file is empty
     # or missing, returns an empty object.
@@ -346,7 +367,8 @@ function Apply-PostureToJsonFile {
 
     if (Test-Path $Path) {
         Ensure-ParentDirectory -Path $BackupTarget
-        Copy-Item -Force $Path $BackupTarget
+        Copy-Item -Force -LiteralPath $Path -Destination $BackupTarget
+        Confirm-BackupIntegrity -SourcePath $Path -BackupPath $BackupTarget
     }
     Ensure-ParentDirectory -Path $Path
     # UTF-8 without BOM; PS 5.1's -Encoding UTF8 emits a BOM, which we avoid.
@@ -411,7 +433,8 @@ function Apply-ClaudeMdBlock {
 
     if ($null -ne $existing) {
         Ensure-ParentDirectory -Path $BackupTarget
-        Copy-Item -Force $Path $BackupTarget
+        Copy-Item -Force -LiteralPath $Path -Destination $BackupTarget
+        Confirm-BackupIntegrity -SourcePath $Path -BackupPath $BackupTarget
     }
     Ensure-ParentDirectory -Path $Path
     # UTF-8 without BOM.
