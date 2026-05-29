@@ -29,6 +29,14 @@
   `allowedHttpHookUrls`, and `npx supabase`. Switched to `@'...'@`
   (single-quoted, literal).
 
+- **Unverified backups before overwrite.** A `Confirm-BackupIntegrity` helper
+  now asserts each backup was actually written (`Test-Path`) and is
+  byte-identical to its source (`Get-FileHash` SHA256) immediately after the
+  `Copy-Item`, and throws before any `WriteAllText` runs -- so the original is
+  never modified without a verified recovery copy on disk. The two `Copy-Item`
+  calls also use `-LiteralPath`/`-Destination` so paths containing wildcard
+  metacharacters (`[`, `]`, etc.) are handled correctly.
+
 ### Changed
 
 - The apply script now prints a per-key change table for both files and emits
