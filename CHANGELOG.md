@@ -1,5 +1,32 @@
 # Changelog
 
+## 2.1.0 - 2026-06-09
+
+### Added
+
+- **Behavioral "no installs" directive in the managed `CLAUDE.md` block.** The
+  block previously recorded settings *facts* but never told the agent how to
+  behave when a tool was missing, so Claude would still propose installs
+  (`pip install ...`, `winget install ...`) and ask the user to pick an install
+  method. The block now instructs the agent to never propose or run installs,
+  never ask which install method to use, and to stop and report missing tooling
+  instead of working around the deny rules. (Deny rules block *execution*; this
+  closes the *guidance* gap that lets a bad proposal happen in the first place.)
+
+- **Deny coverage for OS-level and other-language package managers.** Added
+  `winget`, `choco`, `scoop`, `cargo`, `gem`, `go install`,
+  `dotnet add package` / `dotnet tool install`, `uv tool install`, and the
+  `conda` / `mamba` `create` / `update` subcommands to `permissions.deny`, in
+  both `Bash()` and `PowerShell()` forms. Closes a gap where `winget install ...`
+  was not blocked even though the language package managers were.
+
+### Changed
+
+- Refreshed the shareable summary (`PACKAGE_AWARE_PLATFORM_SETTINGS.md` /
+  `references/shareable-template.md`) and `references/settings-map.md` to
+  document the broader deny coverage and the no-installs guidance. Bumped the
+  managed hardening-block date to `2026-06-09`.
+
 ## 2.0.0 - 2026-05-26
 
 ### Fixed

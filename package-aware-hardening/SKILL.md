@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires Windows with PowerShell 5.1+ and Claude Code. The bundled scripts edit Windows user-level paths (~/.claude and %APPDATA%/Code/User/settings.json) and are not portable to macOS/Linux or to Claude.ai/API surfaces without adaptation.
 metadata:
   author: jibarix
-  version: 2.0.0
+  version: 2.1.0
 ---
 
 # Package-Aware Hardening

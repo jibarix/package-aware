@@ -1,6 +1,6 @@
 # Package-Aware Platform Settings
 
-Date: `2026-05-21`
+Date: `2026-06-09`
 
 This document is the shareable summary of the package-aware settings in use
 across the main platforms on this machine. It is meant to answer two questions
@@ -39,8 +39,9 @@ Current posture:
 - Permission bypass mode is disabled with
   `disableBypassPermissionsMode: "disable"`.
 - The Supabase plugin is disabled.
-- Ad-hoc package execution is denied across npm, pnpm, yarn, bun, pip, pipx,
-  uv, poetry, conda, and mamba.
+- Ad-hoc package execution and installs are denied across npm, pnpm, yarn, bun,
+  pip, pipx, uv, poetry, conda, and mamba, plus OS-level managers (winget,
+  choco, scoop) and other-language managers (cargo, gem, go, dotnet).
 - VS Code extension install via shell is denied with
   `code --install-extension`.
 
@@ -65,6 +66,14 @@ Shareable baseline:
       "PowerShell(pipx run *)",
       "Bash(uv run *)",
       "PowerShell(uv run *)",
+      "Bash(winget install *)",
+      "PowerShell(winget install *)",
+      "Bash(choco install *)",
+      "Bash(scoop install *)",
+      "Bash(cargo install *)",
+      "Bash(gem install *)",
+      "Bash(go install *)",
+      "Bash(dotnet tool install *)",
       "Bash(code --install-extension *)",
       "PowerShell(code --install-extension *)"
     ]
@@ -97,6 +106,10 @@ Shareable baseline:
 ```md
 ## Package-aware defaults
 
+- Never propose or run package/tool installs (`pip`, `conda`, `npm`, `pnpm`,
+  `yarn`, `bun`, `winget`, `choco`, `scoop`, `cargo`, `gem`, `go`, `dotnet`,
+  etc.). If a tool is missing, stop and report it instead of installing or
+  working around the deny rules.
 - Do not propose ad-hoc package execution (`npx`, `pipx run`, `pnpm dlx`,
   `bunx`, `yarn dlx`) unless the user explicitly accepts the risk.
 - Prefer exact version pins and committed lockfiles.

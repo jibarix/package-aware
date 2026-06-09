@@ -52,7 +52,24 @@ $claudeDenyAppend = @(
     'PowerShell(yarn install)','PowerShell(yarn install *)','PowerShell(yarn add *)','PowerShell(yarn dlx *)',
     'PowerShell(bun install)','PowerShell(bun install *)','PowerShell(bun add *)','PowerShell(bun x)','PowerShell(bun x *)','PowerShell(bunx *)',
     'PowerShell(npx *)','PowerShell(npx)',
-    'PowerShell(code --install-extension *)'
+    'PowerShell(code --install-extension *)',
+    # OS-level package managers (Windows + cross-platform) and other-language
+    # managers. Added 2026-06-09 after a `winget install` was found to slip past
+    # the posture, which only covered language package managers (pip/npm/etc.).
+    'Bash(winget install *)','Bash(winget upgrade *)',
+    'Bash(choco install *)','Bash(choco upgrade *)',
+    'Bash(scoop install *)','Bash(scoop update *)',
+    'Bash(cargo install *)','Bash(gem install *)','Bash(go install *)',
+    'Bash(dotnet add package *)','Bash(dotnet tool install *)',
+    'Bash(uv tool install *)',
+    'Bash(conda create *)','Bash(conda update *)','Bash(mamba create *)','Bash(mamba update *)',
+    'PowerShell(winget install *)','PowerShell(winget upgrade *)',
+    'PowerShell(choco install *)','PowerShell(choco upgrade *)',
+    'PowerShell(scoop install *)','PowerShell(scoop update *)',
+    'PowerShell(cargo install *)','PowerShell(gem install *)','PowerShell(go install *)',
+    'PowerShell(dotnet add package *)','PowerShell(dotnet tool install *)',
+    'PowerShell(uv tool install *)',
+    'PowerShell(conda create *)','PowerShell(conda update *)','PowerShell(mamba create *)','PowerShell(mamba update *)'
 )
 
 $vscodeScalarSettings = @(
@@ -67,8 +84,9 @@ $vscodeScalarSettings = @(
 # the bug history that made this script destructive in the first place.
 $managedBlock = @'
 <!-- PACKAGE-AWARE-HARDENING:START -->
-## Global hardening overrides (2026-05-21)
+## Global hardening overrides (2026-06-09)
 
+- **No installs.** Never propose or run package/tool installs: pip, conda, npm, pnpm, yarn, bun, npx, pipx, uv, poetry, winget, choco, scoop, cargo, gem, go, dotnet, and the like. Do not ask the user which install method to use. Use only tooling already present on the machine; if a task cannot proceed with what is installed, stop and report exactly what is missing and let the user decide how to provision it. These commands are also denied in `settings.json`; do not attempt to work around the deny rules.
 - Claude Code auto-updating is disabled via `DISABLE_AUTOUPDATER=1`.
 - `autoUpdatesChannel` is pinned to `stable`.
 - `disableBypassPermissionsMode` is set to `disable` globally.

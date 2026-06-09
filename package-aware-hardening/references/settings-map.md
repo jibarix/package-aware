@@ -21,6 +21,15 @@ Important deny patterns added by the script:
 - `pipx run`
 - `uv run`
 - `code --install-extension`
+- `winget install` / `winget upgrade`
+- `choco install` / `choco upgrade`
+- `scoop install` / `scoop update`
+- `cargo install`, `gem install`, `go install`
+- `dotnet add package`, `dotnet tool install`
+- `uv tool install`
+- `conda create` / `conda update` (and the `mamba` equivalents)
+
+Both `Bash()` and `PowerShell()` forms are added for every pattern.
 
 ## Claude Code global instructions
 
@@ -37,6 +46,9 @@ Purpose:
 
 - Record the package-aware defaults in the file Claude actually loads.
 - Keep the Supabase CLI preference visible.
+- Instruct the agent to never propose or run installs, and to stop and report a
+  missing tool rather than working around the deny rules. (Deny rules block
+  *execution*; this block steers what the agent *proposes* in the first place.)
 
 ## VS Code user settings
 
