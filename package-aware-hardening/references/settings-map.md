@@ -46,9 +46,14 @@ Purpose:
 
 - Record the package-aware defaults in the file Claude actually loads.
 - Keep the Supabase CLI preference visible.
-- Instruct the agent to never propose or run installs, and to stop and report a
-  missing tool rather than working around the deny rules. (Deny rules block
-  *execution*; this block steers what the agent *proposes* in the first place.)
+- Instruct the agent to vet packages before installing (name the package and
+  why, check whether it is already installed, research the latest stable version
+  plus runtime compatibility, research known *security* vulnerabilities for the
+  package and that specific version) and to install only after explicit user
+  approval. The agent does not run installs itself; the deny rules in
+  `settings.json` remain a hard backstop and must not be worked around. (Deny
+  rules block *execution*; this block steers what the agent *proposes* and how it
+  vets in the first place.)
 
 ## VS Code user settings
 

@@ -106,10 +106,15 @@ Shareable baseline:
 ```md
 ## Package-aware defaults
 
-- Never propose or run package/tool installs (`pip`, `conda`, `npm`, `pnpm`,
-  `yarn`, `bun`, `winget`, `choco`, `scoop`, `cargo`, `gem`, `go`, `dotnet`,
-  etc.). If a tool is missing, stop and report it instead of installing or
-  working around the deny rules.
+- Treat package installs as deliberate and vetted, never reflexive. Before
+  installing anything: name the package and why, check whether it is already
+  installed, research the latest stable version and confirm it supports the
+  installed runtime, and research known *security* vulnerabilities for the
+  package and that version. Report findings with a pinned recommendation and
+  install only after explicit approval.
+- The install commands remain denied in `settings.json` as a backstop. The agent
+  does not run installs itself; the user runs the approved pinned command. Do not
+  work around the deny rules.
 - Do not propose ad-hoc package execution (`npx`, `pipx run`, `pnpm dlx`,
   `bunx`, `yarn dlx`) unless the user explicitly accepts the risk.
 - Prefer exact version pins and committed lockfiles.

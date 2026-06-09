@@ -86,7 +86,7 @@ $managedBlock = @'
 <!-- PACKAGE-AWARE-HARDENING:START -->
 ## Global hardening overrides (2026-06-09)
 
-- **No installs.** Never propose or run package/tool installs: pip, conda, npm, pnpm, yarn, bun, npx, pipx, uv, poetry, winget, choco, scoop, cargo, gem, go, dotnet, and the like. Do not ask the user which install method to use. Use only tooling already present on the machine; if a task cannot proceed with what is installed, stop and report exactly what is missing and let the user decide how to provision it. These commands are also denied in `settings.json`; do not attempt to work around the deny rules.
+- **Vet before install.** Treat package installs as deliberate and vetted, never reflexive. When a task needs a package: (1) name the exact package and why it is needed; (2) check whether it is already installed; (3) if not, research the latest stable version and confirm it supports the installed interpreter/runtime; (4) research known SECURITY vulnerabilities for the package and for that specific version; (5) report the findings with a pinned version recommendation and proceed only after explicit user approval. If a current security vulnerability is found, do not install without the user weighing it. The deny rules in `settings.json` are a hard backstop: the agent does not run installs itself, so the user runs the approved pinned command (for example via the `!` prefix). Never guess an install method, never install just to try, and never work around the deny rules.
 - Claude Code auto-updating is disabled via `DISABLE_AUTOUPDATER=1`.
 - `autoUpdatesChannel` is pinned to `stable`.
 - `disableBypassPermissionsMode` is set to `disable` globally.

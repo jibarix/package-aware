@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.2.0 - 2026-06-09
+
+### Changed
+
+- **Reframed the managed `CLAUDE.md` directive from a blanket "no installs" rule
+  to a vet-then-install workflow.** The 2.1.0 directive told the agent to never
+  propose or run installs, which over-rotated: the intended posture is to *vet* a
+  package -- name it and why, check whether it is already installed, research the
+  latest stable version and runtime compatibility, and research known *security*
+  vulnerabilities for the package and that specific version -- then install only
+  after explicit user approval. The `settings.json` deny rules remain a hard
+  backstop: the agent does not run installs itself; the user runs the approved,
+  pinned command (e.g. via the `!` prefix). Updated the apply-script managed
+  block, `references/settings-map.md`, and `references/shareable-template.md` to
+  match.
+
 ## 2.1.0 - 2026-06-09
 
 ### Added
