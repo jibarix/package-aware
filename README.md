@@ -33,7 +33,8 @@ package_aware/
    ├─ SKILL.md                        ← how Claude runs this workflow
    ├─ scripts/
    │  ├─ apply_package_aware_hardening.ps1  ← applies the posture to a machine
-   │  └─ export_shareable_settings.ps1      ← regenerates the summary doc
+   │  ├─ export_shareable_settings.ps1      ← regenerates the summary doc
+   │  └─ release.ps1                         ← tags + publishes a GitHub Release from CHANGELOG.md
    └─ references/
       ├─ settings-map.md              ← every setting + the reason for it
       └─ shareable-template.md        ← the source the summary doc is built from
